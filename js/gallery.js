@@ -66,51 +66,28 @@ const images = [
 
 const gallery = document.querySelector('.gallery');
 
-const createGalleryItem = image => {
-  const listItem = document.createElement('li');
-  listItem.classList.add('gallery-item');
-
-  const link = document.createElement('a');
-  link.classList.add('gallery-link');
-  link.href = image.original;
-
-  link.onclick = event => {
-    event.preventDefault();
-  };
-
-  const img = document.createElement('img');
-  img.classList.add('gallery-image');
-  img.src = image.preview;
-  img.dataset.source = image.original;
-  img.alt = image.description;
-
-  link.appendChild(img);
-  listItem.appendChild(link);
-
-  return listItem;
-};
-
-const galleryItems = images.map(createGalleryItem);
-gallery.append(...galleryItems);
-
-function openModal(image) {
-  const instance = basicLightbox.create(
-    `<img src="${image}" alt="Zoomed Image">`
-  );
-  instance.show();
-
-  document.addEventListener('keydown', event => {
-    if (event.key === 'Escape') {
-      instance.close();
-    }
-  });
-}
+images.forEach(image => {
+  const imgElement = document.createElement('img');
+  imgElement.src = image.preview;
+  imgElement.classList.add('gallery-img');
+  gallery.appendChild(imgElement);
+});
 
 gallery.addEventListener('click', event => {
-  const clickedImage = event.target;
-
-  if (clickedImage.tagName === 'IMG') {
-    const imageSrc = clickedImage.getAttribute('src');
-    openModal(imageSrc);
+  if (event.target.matches('.gallery-img')) {
+    openModal(event.target.src);
   }
 });
+
+function openModal(src) {
+  const modal = basicLightbox.create(`<img src="${src}">`);
+  modal.show();
+  document.addEventListener('keydown', closeModalOnEscape);
+}
+
+function closeModalOnEscape(event) {
+  if (event.key === 'Escape') {
+    modal.close();
+    document.removeEventListener('keydown', closeModalOnEscape);
+  }
+}

@@ -19,18 +19,16 @@ a {
 .gallery {
   display: flex;
   flex-wrap: wrap;
+  gap: 24px;
 }
 
 .gallery img {
-  width: 360px;
-  height: 200px;
-  margin: 10px;
-  object-fit: cover;
-  cursor: pointer;
-}
-
-.gallery-item {
   width: calc((100% - 48px) / 3);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 .basicLightbox {
@@ -38,6 +36,6 @@ a {
 }
 
 .basicLightbox__image img {
-  max-width: 100%;
-  height: auto;
+  width: 1440px;
+  height: 696px;
 }

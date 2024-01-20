@@ -1,0 +1,39 @@
+* {
+  box-sizing: border-box;
+}
+
+ul,
+ol {
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ********************* IMAGES ****************** */
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.gallery img {
+  width: 360px;
+  height: 200px;
+  margin: 10px;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.basicLightbox {
+  z-index: 999;
+}
+
+.basicLightbox__image img {
+  max-width: 100%;
+  height: auto;
+}

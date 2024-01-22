@@ -86,7 +86,7 @@ galleryRef.innerHTML = galleryMarkup;
 
 galleryRef.addEventListener("click", (event) => {
   if (event.target.matches(".gallery-image")) {
-    openModal(event.target.src);
+    openModal(event.target);
   }
 });
 
@@ -94,14 +94,19 @@ const instance = basicLightbox.create(`
     <img src="assets/images/image.png" width="800" height="600">
 `);
 
-instance.show();
-
-function closeLightbox() {
+function closeModalOnEscape() {
   instance.close();
 }
 
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") {
-    closeLightbox();
-  }
-});
+function openModal(target) {
+  const modalImg = instance.element().querySelector("img");
+  modalImg.src = target.dataset.source;
+  instance.show();
+
+  document.addEventListener("keyup", function (event) {
+    if (event.key === "Escape") {
+      closeModalOnEscape();
+      document.removeEventListener("keyup", closeModalOnEscape);
+    }
+  });
+}

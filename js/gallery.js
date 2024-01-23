@@ -64,49 +64,54 @@ const images = [
   },
 ];
 
-const galleryRef = document.querySelector(".gallery");
+const gallery = document.querySelector(".gallery");
 
-const galleryMarkup = images
-  .map(({ preview, original, description }) => {
-    return `
-      <li class="gallery-item">
-        <a class="gallery-link" href="${original}" onclick="event.preventDefault()">
-          <img
-            class="gallery-image"
-            src="${preview}"
-            data-source="${original}"
-            alt="${description}"
-          />
-        </a>
-      </li>`;
-  })
-  .join("");
+function imageGallery() {
+  const image = images
+    .map(({ preview, original, description }) => {
+      return `<li class="gallery-item">
+      <a class="gallery-link" href="${original}">
+        <img
+          class="gallery-image"
+          src="${preview}"
+          data-source="${original}"
+          alt="${description}"
+        />
+      </a>
+    </li>`;
+    })
+    .join("\n");
+  gallery.innerHTML = image;
 
-galleryRef.innerHTML = galleryMarkup;
+  gallery.addEventListener("click", (e) => {
+    const targetImage = e.target.closest(".gallery-image");
+    if (targetImage) {
+      e.preventDefault();
+      const largeImageSource = targetImage.getAttribute("data-source");
+      const imageAlt = targetImage.getAttribute("alt");
+      const instance = basicLightbox.create(
+        `
+          <img src="${largeImageSource}" alt="Large image: ${imageAlt}"/>
+        `,
+        {
+          onShow: (instance) => {
+            document.addEventListener("keydown", handleKeyPress);
+          },
+          onClose: (instance) => {
+            document.removeEventListener("keydown", handleKeyPress);
+          },
+        }
+      );
 
-galleryRef.addEventListener("click", (event) => {
-  if (event.target.matches(".gallery-image")) {
-    openModal(event.target);
-  }
-});
+      instance.show();
 
-const instance = basicLightbox.create(`
-    <img src="assets/images/image.png" width="800" height="600">
-`);
-
-function closeModalOnEscape() {
-  instance.close();
-}
-
-function openModal(target) {
-  const modalImg = instance.element().querySelector("img");
-  modalImg.src = target.dataset.source;
-  instance.show();
-
-  document.addEventListener("keyup", function (event) {
-    if (event.key === "Escape") {
-      closeModalOnEscape();
-      document.removeEventListener("keyup", closeModalOnEscape);
+      function handleKeyPress(event) {
+        if (event.key === "Escape") {
+          instance.close();
+        }
+      }
     }
   });
 }
+
+imageGallery();

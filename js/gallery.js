@@ -84,8 +84,8 @@ function imageGallery() {
   gallery.innerHTML = image;
 
   gallery.addEventListener("click", (e) => {
-    const targetImage = e.target.closest(".gallery-image");
-    if (targetImage) {
+    const targetImage = e.target;
+    if (targetImage.classList.contains("gallery-image")) {
       e.preventDefault();
       const largeImageSource = targetImage.getAttribute("data-source");
       const imageAlt = targetImage.getAttribute("alt");
